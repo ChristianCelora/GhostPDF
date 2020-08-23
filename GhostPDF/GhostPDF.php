@@ -20,10 +20,10 @@ class GhostPDF {
         return (file_exists($path) && is_file($path) && $file_parts["extension"] == "pdf");
     }
 
-    public function compress(): string{
+    public function compress(bool $max_compression = false): string{
         $file_parts = pathinfo($this->path);
         $outputname = $this->generateOutputFilename();
-        $command = $this->composeCommand($outputname);
+        $command = $this->composeCommand($outputname, $max_compression);
         exec($command);
         return $this->dir."/".$outputname;
     }
@@ -33,20 +33,38 @@ class GhostPDF {
         return $file_parts["filename"]."_compressed.pdf";
     }
 
-    private function composeCommand(string $outputname): string{
+    private function composeCommand(string $outputname, bool $max_compression): string{
         $output_path = $this->dir."/".$outputname;
-        return "gs -q -dNOPAUSE -dBATCH -dSAFER ".
+        $command = "gs -q -dNOPAUSE -dBATCH -dSAFER ".
             "-sDEVICE=pdfwrite  ".
+            "-sstdout=%stderr ". // silence output messages
             "-dCompatibilityLevel=1.3  ".
-            "-dPDFSETTINGS=/screen  ".
+            // screen = only screen, ebook = low, printer = high, prepress = high (preserving color), default = similar to screen
+            "-dPDFSETTINGS=/screen  ".  
             "-dEmbedAllFonts=true  ".
             "-dSubsetFonts=true  ".
-            "-dColorImageDownsampleType=/Bicubic  ".
-            "-dColorImageResolution=144  ".
-            "-dGrayImageDownsampleType=/Bicubic  ".
-            "-dGrayImageResolution=144  ".
-            "-dMonoImageDownsampleType=/Bicubic  ".
-            "-dMonoImageResolution=144  ".
-            "-sOutputFile=$output_path ".$this->path;
+            "-dDetectDuplicateImages=true ";
+        if($max_compression){
+            $command .= "-dDownsampleColorImages=true ".
+                "-dDownsampleGrayImages=true ".
+                "-dDownsampleMonoImages=true ".
+                "-dColorImageResolution=72 ".
+                "-dGrayImageResolution=72 ".
+                "-dMonoImageResolution=72 ".
+                "-dColorImageDownsampleThreshold=1.0 ".
+                "-dGrayImageDownsampleThreshold=1.0 ".
+                "-dMonoImageDownsampleThreshold=1.0 ";
+        }else{
+            $command .= "-dColorImageDownsampleType=/Bicubic  ".
+                "-dColorImageResolution=144  ".
+                "-dGrayImageDownsampleType=/Bicubic  ".
+                "-dGrayImageResolution=144  ".
+                "-dMonoImageDownsampleType=/Bicubic  ".
+                "-dMonoImageResolution=144  ";
+        }
+
+        $command .= "-sOutputFile=$output_path ".$this->path;
+
+        return $command;
     }
 }
