@@ -30,7 +30,12 @@ class CoreTest extends TestCase {
         $in_file_info = pathinfo($this->filepath);
         $out_file_info = pathinfo($outputfile);
         $this->assertEquals($in_file_info["filename"]."_compressed.pdf", 
-            $out_file_info["filename"].".".$out_file_info["extension"]);
-        $this->assertLessThanOrEqual(filesize($this->filepath), filesize($outputfile));
+            $out_file_info["filename"].".".$out_file_info["extension"]
+        );
+        $this->assertLessThanOrEqual(
+            filesize($this->filepath), 
+            filesize($outputfile),
+            "Compressed file should have smaller size than original :|"
+        );
     }
 }
