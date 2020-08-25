@@ -32,20 +32,21 @@ class GhostPDF {
         $file_parts = pathinfo($this->path);
         return $file_parts["filename"]."_compressed.pdf";
     }
-
+    // docs: https://www.ghostscript.com/doc/current/VectorDevices.htm
     private function composeCommand(string $outputname, bool $max_compression): string{
         $output_path = $this->dir."/".$outputname;
-        $command = "gs -q -dNOPAUSE -dBATCH -dSAFER ".
+        $command = "gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
             "-sDEVICE=pdfwrite  ".
             "-sstdout=%stderr ". // silence output messages
             "-dCompatibilityLevel=1.3  ".
-            // screen = only screen, ebook = low, printer = high, prepress = high (preserving color), default = similar to screen
-            "-dPDFSETTINGS=/screen  ".  
+              
             "-dEmbedAllFonts=true  ".
             "-dSubsetFonts=true  ".
             "-dDetectDuplicateImages=true ";
         if($max_compression){
-            $command .= "-dDownsampleColorImages=true ".
+            // screen = only screen, ebook = low, printer = high, prepress = high (preserving color), default = similar to screen
+            $command .= "-dPDFSETTINGS=/screen  ".
+                "-dDownsampleColorImages=true ".
                 "-dDownsampleGrayImages=true ".
                 "-dDownsampleMonoImages=true ".
                 "-dColorImageResolution=72 ".
@@ -55,7 +56,8 @@ class GhostPDF {
                 "-dGrayImageDownsampleThreshold=1.0 ".
                 "-dMonoImageDownsampleThreshold=1.0 ";
         }else{
-            $command .= "-dColorImageDownsampleType=/Bicubic  ".
+            $command .= "-dPDFSETTINGS=/ebook  ".
+                "-dColorImageDownsampleType=/Bicubic  ".
                 "-dColorImageResolution=144  ".
                 "-dGrayImageDownsampleType=/Bicubic  ".
                 "-dGrayImageResolution=144  ".
