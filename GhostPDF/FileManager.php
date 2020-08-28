@@ -28,7 +28,7 @@ class File {
     private $directory;
 
     function __construct(string $path){
-        $path_parts = pathinfo(path);
+        $path_parts = pathinfo($path);
         $this->path = $path;
         $this->directory = $path_parts["dirname"];
         $this->extension = $path_parts["extension"];

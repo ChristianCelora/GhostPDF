@@ -1,5 +1,4 @@
 <?php
-
 require_once("CompressPrototype.php");
 
 class GhostPDF {
@@ -10,7 +9,7 @@ class GhostPDF {
     private $compress_factory;
 
     function __construct(string $path){
-        $fm = new FileManager($path);
+        $this->fm = new FileManager($path);
         if(!$this->fm->isPdfValid()){
             throw new Exception("PDF path not valid: $path", 1);
         }
@@ -19,7 +18,8 @@ class GhostPDF {
 
     public function compress(bool $max_compression = false): string{
         $type = ($max_compression) ? ComrpessFactory::MAX_COMPRESSION : ComrpessFactory::STANDARD_COMPRESSION;
-        $engine = $this->compress_factory->create($this->fm->getFile());
+        $engine = $this->compress_factory->create($type, $this->fm->getFile());
+        return $engine->compress();
     }
-    
+
 }

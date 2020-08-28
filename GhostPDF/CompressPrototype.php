@@ -1,6 +1,5 @@
 <?php
-
-require_one("FileManager.php");
+require_once("FileManager.php");
 
 /** Factory */
 class ComrpessFactory {
@@ -11,9 +10,9 @@ class ComrpessFactory {
 
     public function create(int $compression_type, File $file): ICompress{
         switch($compression_type){
-            case STANDARD_COMPRESSION:
+            case self::STANDARD_COMPRESSION:
                 return new DefaultCompress($file);
-            case MAX_COMPRESSION:
+            case self::MAX_COMPRESSION:
                 return new MaxCompress($file);
         }
     }
@@ -40,22 +39,22 @@ class DefaultCompress extends ICompress {
     }        
 
     protected function composeCommand(string $outputname){
-        $output_path = $this->dir."/".$outputname;
-        $command = "gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
-        "-sDEVICE=pdfwrite  ".
-        "-sstdout=%stderr ".
-        "-dCompatibilityLevel=1.3  ".
-        "-dEmbedAllFonts=true  ".
-        "-dSubsetFonts=true  ".
-        "-dDetectDuplicateImages=true ".
-        "-dPDFSETTINGS=/ebook  ".
-        "-dColorImageDownsampleType=/Bicubic  ".
-        "-dColorImageResolution=144  ".
-        "-dGrayImageDownsampleType=/Bicubic  ".
-        "-dGrayImageResolution=144  ".
-        "-dMonoImageDownsampleType=/Bicubic  ".
-        "-dMonoImageResolution=144  ".
-        "-sOutputFile=$outputname ".$this->path;
+        $output_path = $this->file->getDirectory()."/".$outputname;
+        return "gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
+            "-sDEVICE=pdfwrite  ".
+            "-sstdout=%stderr ".
+            "-dCompatibilityLevel=1.3  ".
+            "-dEmbedAllFonts=true  ".
+            "-dSubsetFonts=true  ".
+            "-dDetectDuplicateImages=true ".
+            "-dPDFSETTINGS=/ebook  ".
+            "-dColorImageDownsampleType=/Bicubic  ".
+            "-dColorImageResolution=144  ".
+            "-dGrayImageDownsampleType=/Bicubic  ".
+            "-dGrayImageResolution=144  ".
+            "-dMonoImageDownsampleType=/Bicubic  ".
+            "-dMonoImageResolution=144  ".
+            "-sOutputFile=$outputname ".$this->file->getPath();
     }
 
     protected function generateOutputFilePath(){
@@ -69,25 +68,25 @@ class MaxCompress extends ICompress {
     }        
 
     protected function composeCommand(string $outputname){
-        $output_path = $this->dir."/".$outputname;
-        $command = "gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
-        "-sDEVICE=pdfwrite  ".
-        "-sstdout=%stderr ".
-        "-dCompatibilityLevel=1.3  ".
-        "-dEmbedAllFonts=true  ".
-        "-dSubsetFonts=true  ".
-        "-dDetectDuplicateImages=true ".
-        "-dPDFSETTINGS=/screen  ".
-        "-dDownsampleColorImages=true ".
-        "-dDownsampleGrayImages=true ".
-        "-dDownsampleMonoImages=true ".
-        "-dColorImageResolution=72 ".
-        "-dGrayImageResolution=72 ".
-        "-dMonoImageResolution=72 ".
-        "-dColorImageDownsampleThreshold=1.0 ".
-        "-dGrayImageDownsampleThreshold=1.0 ".
-        "-dMonoImageDownsampleThreshold=1.0 ".
-        "-sOutputFile=$outputname ".$this->path;
+        $output_path = $this->file->getDirectory()."/".$outputname;
+        return "gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
+            "-sDEVICE=pdfwrite  ".
+            "-sstdout=%stderr ".
+            "-dCompatibilityLevel=1.3  ".
+            "-dEmbedAllFonts=true  ".
+            "-dSubsetFonts=true  ".
+            "-dDetectDuplicateImages=true ".
+            "-dPDFSETTINGS=/screen  ".
+            "-dDownsampleColorImages=true ".
+            "-dDownsampleGrayImages=true ".
+            "-dDownsampleMonoImages=true ".
+            "-dColorImageResolution=72 ".
+            "-dGrayImageResolution=72 ".
+            "-dMonoImageResolution=72 ".
+            "-dColorImageDownsampleThreshold=1.0 ".
+            "-dGrayImageDownsampleThreshold=1.0 ".
+            "-dMonoImageDownsampleThreshold=1.0 ".
+            "-sOutputFile=$outputname ".$this->file->getPath();
     }
 
     protected function generateOutputFilePath(){
