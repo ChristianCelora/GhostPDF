@@ -1,5 +1,25 @@
 <?php
 
+require_one("FileManager.php");
+
+/** Factory */
+class ComrpessFactory {
+    const STANDARD_COMPRESSION = 0;
+    const MAX_COMPRESSION = 1;
+
+    function __construct(){}
+
+    public function create(int $compression_type, File $file): ICompress{
+        switch($compression_type){
+            case STANDARD_COMPRESSION:
+                return new DefaultCompress($file);
+            case MAX_COMPRESSION:
+                return new MaxCompress($file);
+        }
+    }
+}
+
+/** Prototype */
 abstract class ICompress {
     protected $file;
 
