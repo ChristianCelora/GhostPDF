@@ -5,7 +5,9 @@
  *  2- max_compression: if set use max compression
  */
 
-require_once("src/GhostPDF.php");
+require_once("vendor/autoload.php");
+
+use Celo\GhostPDF\GhostPDF;
 
 if($argc < 2 || !isset($argv[1]))
     exit("Insert PDF path for unit test\n");

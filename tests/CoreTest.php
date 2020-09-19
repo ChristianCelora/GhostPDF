@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__FILE__)."/../src/GhostPDF.php");
-
+// require_once(dirname(__FILE__)."/../src/GhostPDF.php");
 use \PHPUnit\Framework\TestCase;
+use Celo\GhostPDF\GhostPDF;
 
 class CoreTest extends TestCase {
 
