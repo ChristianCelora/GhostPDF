@@ -5,7 +5,7 @@ Library for compress PDF file using ghostscript.
 ## Install
 Install library through composer:
 ``` 
-composer require celo/ghostpdf
+composer require celo/ghost-pdf
 ``` 
 
 ## Usage
