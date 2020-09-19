@@ -22,12 +22,12 @@ class ComrpessFactory {
 abstract class ICompress {
     protected $file;
 
-    protected abstract function composeCommand(string $outputname);
+    protected abstract function composeCommandArgs(string $outputname);
     protected abstract function generateOutputFilePath();
 
     public function compress() : string{
         $output_path = $this->generateOutputFilePath();
-        $command = $this->composeCommand($output_path);
+        $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path));
         exec($command);
         return $output_path;
     }
@@ -38,9 +38,9 @@ class DefaultCompress extends ICompress {
         $this->file = $file;
     }        
 
-    protected function composeCommand(string $outputname){
+    protected function composeCommandArgs(string $outputname){
         $output_path = $this->file->getDirectory()."/".$outputname;
-        return "gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
+        return "-q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
             "-sDEVICE=pdfwrite  ".
             "-sstdout=%stderr ".
             "-dCompatibilityLevel=1.3  ".
@@ -67,9 +67,9 @@ class MaxCompress extends ICompress {
         $this->file = $file;
     }        
 
-    protected function composeCommand(string $outputname){
+    protected function composeCommandArgs(string $outputname){
         $output_path = $this->file->getDirectory()."/".$outputname;
-        return "gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
+        return "-q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
             "-sDEVICE=pdfwrite  ".
             "-sstdout=%stderr ".
             "-dCompatibilityLevel=1.3  ".
