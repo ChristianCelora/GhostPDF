@@ -7,7 +7,11 @@ class ComrpessFactory {
     const MAX_COMPRESSION = 1;
 
     function __construct(){}
-
+    /**
+     * Creates new compress object based on $compression_type
+     * @param int $compression_type Indicate the type of compression
+     * @param File $file
+     */
     public function create(int $compression_type, File $file): ICompress{
         switch($compression_type){
             case self::STANDARD_COMPRESSION:
@@ -21,11 +25,22 @@ class ComrpessFactory {
 /** Prototype */
 abstract class ICompress {
     protected $file;
-
-    protected abstract function composeCommandArgs(string $outputname);
-    protected abstract function generateOutputFilePath();
-
-    public function compress() : string{
+    /**
+     * Compose gs command args
+     * @param string $outputname outptu file name
+     * @return string args for the gs command
+     */
+    protected abstract function composeCommandArgs(string $outputname): string;
+    /**
+     * Generate output file path
+     * @return string output file path
+     */
+    protected abstract function generateOutputFilePath(): string;
+    /**
+     * Compress the PDF
+     * @return string output file path
+     */
+    public function compress(): string{
         $output_path = $this->generateOutputFilePath();
         $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path));
         exec($command);
@@ -38,7 +53,7 @@ class DefaultCompress extends ICompress {
         $this->file = $file;
     }        
 
-    protected function composeCommandArgs(string $outputname){
+    protected function composeCommandArgs(string $outputname): string{
         $output_path = $this->file->getDirectory()."/".$outputname;
         return "-q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
             "-sDEVICE=pdfwrite  ".
@@ -57,7 +72,7 @@ class DefaultCompress extends ICompress {
             "-sOutputFile=$outputname ".$this->file->getPath();
     }
 
-    protected function generateOutputFilePath(){
+    protected function generateOutputFilePath(): string{
         return $this->file->getDirectory()."/".$this->file->getFilename()."_compressed.pdf";
     }
 }
@@ -67,7 +82,7 @@ class MaxCompress extends ICompress {
         $this->file = $file;
     }        
 
-    protected function composeCommandArgs(string $outputname){
+    protected function composeCommandArgs(string $outputname): string{
         $output_path = $this->file->getDirectory()."/".$outputname;
         return "-q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
             "-sDEVICE=pdfwrite  ".
@@ -89,7 +104,7 @@ class MaxCompress extends ICompress {
             "-sOutputFile=$outputname ".$this->file->getPath();
     }
 
-    protected function generateOutputFilePath(){
+    protected function generateOutputFilePath(): string{
         return $this->file->getDirectory()."/".$this->file->getFilename()."_compressed.pdf";
     }
 }

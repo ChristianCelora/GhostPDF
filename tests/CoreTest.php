@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__)."/../GhostPDF/GhostPDF.php");
+require_once(dirname(__FILE__)."/../src/GhostPDF.php");
 
 use \PHPUnit\Framework\TestCase;
 

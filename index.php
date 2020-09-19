@@ -5,7 +5,7 @@
  *  2- max_compression: if set use max compression
  */
 
-require_once("GhostPDF/GhostPDF.php");
+require_once("src/GhostPDF.php");
 
 if($argc < 2 || !isset($argv[1]))
     exit("Insert PDF path for unit test\n");
