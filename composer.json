@@ -2,6 +2,7 @@
     "name": "celo/ghost-pdf",
     "description": "PDF compression component",
     "type": "library",
+    "keywords": ["pdf", "compress"],
     "license": "MIT",
     "authors": [
         {
