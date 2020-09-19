@@ -17,3 +17,7 @@ $path_output_file = $gs->compress();
 ``` 
 
 For max compression set first argument of compress function to *true*
+
+## Author
+Christian Celora.
+Check my github at https://github.com/ChristianCelora
