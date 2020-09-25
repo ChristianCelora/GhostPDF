@@ -20,7 +20,7 @@ main($filepath, $max_compression);
 function main(string $input_file, bool $max_compression){
     $original_size = filesize($input_file);
     try{
-    $gs_pdf = new GhostPDF($input_file);
+        $gs_pdf = new GhostPDF($input_file);
     }catch(Exception $e){
         exit($e->getMessage());
     }

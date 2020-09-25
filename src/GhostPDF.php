@@ -15,8 +15,8 @@ class GhostPDF {
 
     function __construct(string $path){
         $this->fm = new FileManager($path);
-        if(!$this->fm->isPdfValid()){
-            throw new Exception("PDF path not valid: $path", 1);
+        if(!$this->fm->isFileValid()){
+            throw new Exception("file path not valid: $path", 1);
         }
         $this->compress_factory = new ComrpessFactory();
     }

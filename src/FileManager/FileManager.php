@@ -21,9 +21,9 @@ class FileManager {
      * Checks if file is valid PDF
      * @return bool
      */
-    public function isPdfValid(): bool{
+    public function isFileValid(): bool{
         $path = $this->file->getPath();
-        return (file_exists($path) && is_file($path) && $this->file->getExtension() == "pdf");
+        return (file_exists($path) && is_file($path));
     }
     /**
      * Return file object

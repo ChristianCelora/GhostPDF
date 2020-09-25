@@ -16,9 +16,9 @@ class File {
     function __construct(string $path){
         $path_parts = pathinfo($path);
         $this->path = $path;
-        $this->directory = $path_parts["dirname"];
-        $this->extension = $path_parts["extension"];
         $this->filename = $path_parts["filename"];
+        $this->directory = (isset($path_parts["dirname"])) ? $path_parts["dirname"] : "";
+        $this->extension = (isset($path_parts["extension"])) ? $path_parts["extension"] : "";
     }
     /**
      * Return File name without extension
