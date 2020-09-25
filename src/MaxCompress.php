@@ -30,8 +30,4 @@ class MaxCompress extends ICompress {
             "-dMonoImageDownsampleThreshold=1.0 ".
             "-sOutputFile=$outputname ".$this->file->getPath();
     }
-
-    protected function generateOutputFilePath(): string{
-        return $this->file->getDirectory()."/".$this->file->getFilename()."_compressed.pdf";
-    }
 }

@@ -27,8 +27,4 @@ class DefaultCompress extends ICompress {
             "-dMonoImageResolution=144  ".
             "-sOutputFile=$outputname ".$this->file->getPath();
     }
-
-    protected function generateOutputFilePath(): string{
-        return $this->file->getDirectory()."/".$this->file->getFilename()."_compressed.pdf";
-    }
 }

@@ -30,7 +30,8 @@ class CoreTest extends TestCase {
         $outputfile = $this->gs_pdf->compress();
         $in_file_info = pathinfo($this->filepath);
         $out_file_info = pathinfo($outputfile);
-        $this->assertEquals($in_file_info["filename"]."_compressed.pdf", 
+        $this->assertEquals(
+            $in_file_info["filename"]."_compressed.pdf", 
             $out_file_info["filename"].".".$out_file_info["extension"]
         );
         $this->assertLessThanOrEqual(
@@ -44,7 +45,8 @@ class CoreTest extends TestCase {
         $outputfile = $this->gs_pdf->compress(true);
         $in_file_info = pathinfo($this->filepath);
         $out_file_info = pathinfo($outputfile);
-        $this->assertEquals($in_file_info["filename"]."_compressed.pdf", 
+        $this->assertEquals(
+            $in_file_info["filename"]."_compressed.pdf", 
             $out_file_info["filename"].".".$out_file_info["extension"]
         );
         $this->assertLessThanOrEqual(
@@ -52,5 +54,13 @@ class CoreTest extends TestCase {
             filesize($outputfile),
             "Compressed file should have smaller size than original :|"
         );
+    }
+
+    public function testSetOutputFilename(){
+        $this->gs_pdf->setOutputFilename("test_renamed");
+        $outputfile = $this->gs_pdf->compress();
+        $out_file_info = pathinfo($outputfile);
+        $this->assertEquals("test_renamed", $out_file_info["filename"]);
+
     }
 }
