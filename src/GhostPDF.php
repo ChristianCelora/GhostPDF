@@ -14,6 +14,8 @@ class GhostPDF {
     private $compress_factory;
     /** @var string $output_name */
     private $output_name;
+    /** @var string $output_dir */
+    private $output_dir;
 
     function __construct(string $path){
         $this->fm = new FileManager($path);
@@ -22,16 +24,27 @@ class GhostPDF {
         }
         $this->compress_factory = new ComrpessFactory();
         $this->output_name = "";
+        $this->output_dir = "";
     }
-
+    /**
+     * Sets output file name
+     * @param string $output_name
+     */
     public function setOutputFilename(string $output_name){
         $this->output_name = $output_name;
+    }
+    /**
+     * Sets output file directory
+     * @param string $output_dir
+     */
+    public function setOutputDirectory(string $output_dir){
+        $this->output_dir = $output_dir;
     }
 
     public function compress(bool $max_compression = false): string{
         $type = ($max_compression) ? ComrpessFactory::MAX_COMPRESSION : ComrpessFactory::STANDARD_COMPRESSION;
         $engine = $this->compress_factory->create($type, $this->fm->getFile());
-        return $engine->compress($this->output_name);
+        return $engine->compress($this->output_dir, $this->output_name);
     }
 
 }
