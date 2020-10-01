@@ -1,10 +1,10 @@
 <?php
-namespace Celo\GhostPDF;
+namespace Celo\GhostPDF\Compress;
 
-use Celo\GhostPDF\ICompress;
+use Celo\GhostPDF\Compress\ICompress;
 use Celo\GhostPDF\FileManager\File;
 
-class DefaultCompress extends ICompress {
+class MaxCompress extends ICompress {
     function __construct(File $file){
         $this->file = $file;
     }        
@@ -18,13 +18,16 @@ class DefaultCompress extends ICompress {
             "-dEmbedAllFonts=true  ".
             "-dSubsetFonts=true  ".
             "-dDetectDuplicateImages=true ".
-            "-dPDFSETTINGS=/ebook  ".
-            "-dColorImageDownsampleType=/Bicubic  ".
-            "-dColorImageResolution=144  ".
-            "-dGrayImageDownsampleType=/Bicubic  ".
-            "-dGrayImageResolution=144  ".
-            "-dMonoImageDownsampleType=/Bicubic  ".
-            "-dMonoImageResolution=144  ".
+            "-dPDFSETTINGS=/screen  ".
+            "-dDownsampleColorImages=true ".
+            "-dDownsampleGrayImages=true ".
+            "-dDownsampleMonoImages=true ".
+            "-dColorImageResolution=72 ".
+            "-dGrayImageResolution=72 ".
+            "-dMonoImageResolution=72 ".
+            "-dColorImageDownsampleThreshold=1.0 ".
+            "-dGrayImageDownsampleThreshold=1.0 ".
+            "-dMonoImageDownsampleThreshold=1.0 ".
             "-sOutputFile=$outputname ".$this->file->getPath();
     }
 }

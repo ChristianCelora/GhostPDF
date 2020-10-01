@@ -1,9 +1,9 @@
 <?php
 namespace Celo\GhostPDF\Factory;
 
-use Celo\GhostPDF\ICompress;
-use Celo\GhostPDF\DefaultCompress;
-use Celo\GhostPDF\MaxCompress;
+use Celo\GhostPDF\Compress\ICompress;
+use Celo\GhostPDF\Compress\DefaultCompress;
+use Celo\GhostPDF\Compress\MaxCompress;
 use Celo\GhostPDF\FileManager\File;
 
 /** Factory */

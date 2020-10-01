@@ -40,7 +40,11 @@ class GhostPDF {
     public function setOutputDirectory(string $output_dir){
         $this->output_dir = $output_dir;
     }
-
+    /**
+     * Compress PDF 
+     * @param bool $max_compression Optional. if true utilize maxium compression
+     * @return string path compressed file 
+     */
     public function compress(bool $max_compression = false): string{
         $type = ($max_compression) ? ComrpessFactory::MAX_COMPRESSION : ComrpessFactory::STANDARD_COMPRESSION;
         $engine = $this->compress_factory->create($type, $this->fm->getFile());

@@ -1,5 +1,5 @@
 <?php
-namespace Celo\GhostPDF;
+namespace Celo\GhostPDF\Compress;
 
 /** Prototype */
 abstract class ICompress {
@@ -20,7 +20,7 @@ abstract class ICompress {
     protected function generateOutputFilePath(string $output_dir, string $output_name): string{
         $filename = ($output_name != "") ? $output_name : $this->file->getFilename()."_compressed";
         $directory = ($output_dir != "") ? $output_dir : $this->file->getDirectory();
-        return $filename."/".$filename.".pdf";
+        return $directory."/".$filename.".pdf";
     }
     /**
      * Compress the PDF
