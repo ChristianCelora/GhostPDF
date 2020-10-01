@@ -9,8 +9,7 @@ class MaxCompress extends ICompress {
         $this->file = $file;
     }        
 
-    protected function composeCommandArgs(string $outputname): string{
-        $output_path = $this->file->getDirectory()."/".$outputname;
+    protected function composeCommandArgs(string $output_path): string{
         return "-q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
             "-sDEVICE=pdfwrite  ".
             "-sstdout=%stderr ".
@@ -28,6 +27,6 @@ class MaxCompress extends ICompress {
             "-dColorImageDownsampleThreshold=1.0 ".
             "-dGrayImageDownsampleThreshold=1.0 ".
             "-dMonoImageDownsampleThreshold=1.0 ".
-            "-sOutputFile=$outputname ".$this->file->getPath();
+            "-sOutputFile=$output_path ".$this->file->getPath();
     }
 }

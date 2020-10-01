@@ -67,9 +67,7 @@ class CoreTest extends TestCase {
     public function testSetOutputDirectory(){
         $this->gs_pdf->setOutputDirectory("/tmp/");
         $outputfile = $this->gs_pdf->compress();
-        echo $outputfile;
         $out_file_info = pathinfo($outputfile);
         $this->assertEquals("/tmp", $out_file_info["dirname"]);
-
     }
 }

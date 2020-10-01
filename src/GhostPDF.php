@@ -4,7 +4,7 @@
 namespace Celo\GhostPDF;
 
 use Celo\GhostPDF\FileManager\FileManager;
-use Celo\GhostPDF\Factory\ComrpessFactory;
+use Celo\GhostPDF\Compress\Factory\ComrpessFactory;
 
 class GhostPDF {
 

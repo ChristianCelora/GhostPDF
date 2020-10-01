@@ -1,5 +1,5 @@
 <?php
-namespace Celo\GhostPDF\Factory;
+namespace Celo\GhostPDF\Compress\Factory;
 
 use Celo\GhostPDF\Compress\ICompress;
 use Celo\GhostPDF\Compress\DefaultCompress;

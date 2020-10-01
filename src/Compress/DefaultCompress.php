@@ -9,8 +9,7 @@ class DefaultCompress extends ICompress {
         $this->file = $file;
     }        
 
-    protected function composeCommandArgs(string $outputname): string{
-        $output_path = $this->file->getDirectory()."/".$outputname;
+    protected function composeCommandArgs(string $output_path): string{
         return "-q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".
             "-sDEVICE=pdfwrite  ".
             "-sstdout=%stderr ".
@@ -25,6 +24,6 @@ class DefaultCompress extends ICompress {
             "-dGrayImageResolution=144  ".
             "-dMonoImageDownsampleType=/Bicubic  ".
             "-dMonoImageResolution=144  ".
-            "-sOutputFile=$outputname ".$this->file->getPath();
+            "-sOutputFile=$output_path ".$this->file->getPath();
     }
 }
