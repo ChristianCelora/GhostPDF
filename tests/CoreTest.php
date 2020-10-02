@@ -39,6 +39,7 @@ class CoreTest extends TestCase {
             filesize($outputfile),
             "Compressed file should have smaller size than original :|"
         );
+        $this->assertFileExists($outputfile);
     }
 
     public function testMaxCompress(){
@@ -54,6 +55,7 @@ class CoreTest extends TestCase {
             filesize($outputfile),
             "Compressed file should have smaller size than original :|"
         );
+        $this->assertFileExists($outputfile);
     }
 
     public function testSetOutputFilename(){
@@ -70,4 +72,31 @@ class CoreTest extends TestCase {
         $out_file_info = pathinfo($outputfile);
         $this->assertEquals("/tmp", $out_file_info["dirname"]);
     }
+
+    public function testKeepFirstPage(){
+        $outputfile = $this->gs_pdf->removePages(["1-1"]);
+        $this->assertFileExists($outputfile);
+        $this->assertEquals(
+            1, 
+            $this->count_pages($outputfile),
+            "Il numero di pagine del file creato non corrispondono."
+        );
+    }
+
+    public function testKeepFirstTenPages(){
+        $outputfile = $this->gs_pdf->removePages(["1-10"]);
+        $this->assertFileExists($outputfile);
+        $this->assertLessThanOrEqual(
+            10, 
+            $this->count_pages($outputfile),
+            "Il numero di pagine del file creato non corrispondono."
+        );
+    }
+
+    /** Auxiliar functions */
+    function count_pages($pdfname) {
+        $pdftext = file_get_contents($pdfname);
+        $num = preg_match_all("/\/Page\W/", $pdftext, $dummy);
+        return $num;
+      }
 }

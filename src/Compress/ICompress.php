@@ -7,7 +7,7 @@ abstract class ICompress {
     protected $file;
     /**
      * Compose gs command args
-     * @param string $output_path outptu file path
+     * @param string $output_path output file path
      * @return string args for the gs command
      */
     protected abstract function composeCommandArgs(string $output_path): string;

@@ -5,9 +5,9 @@ namespace Celo\GhostPDF;
 
 use Celo\GhostPDF\FileManager\FileManager;
 use Celo\GhostPDF\Compress\Factory\ComrpessFactory;
+use Celo\GhostPDF\PagesManipulator\PagesManipulator;
 
 class GhostPDF {
-
     /** @var FileManager $fm */
     private $fm;
     /** @var ComrpessFactory $compress_factory */
@@ -50,5 +50,13 @@ class GhostPDF {
         $engine = $this->compress_factory->create($type, $this->fm->getFile());
         return $engine->compress($this->output_dir, $this->output_name);
     }
-
+    /**
+     * Remove pages from PDF
+     * @param array $ranges range page to be kept in new file
+     * @return string path output file 
+     */
+    public function removePages(array $ranges){
+        $engine = new PagesManipulator($this->fm->getFile());
+        return $engine->remove($this->output_dir, $this->output_name, $ranges);
+    }
 }
