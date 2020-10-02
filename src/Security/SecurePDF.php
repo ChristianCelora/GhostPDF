@@ -1,44 +1,46 @@
 <?php
 namespace Celo\GhostPDF\Security;
 
+use Celo\GhostPDF\AbstractGS;
 use Celo\GhostPDF\FileManager\File;
 
-class SecurePDF {
+class SecurePDF extends AbstractGS{
+    /** @var string $password */
+    protected $password;
+    /** @param File $file */
     function __construct(File $file){
-        $this->file = $file;
+        parent::__construct($file, "new");
+        $this->password = "";
     } 
+    /**
+     * Sets password
+     * @param string $psw
+     */
+    public function setPassword(string $psw){
+        $this->password = $psw;
+    }
     /**
      * Sets owner password to output pdf
      * @param $output_dir string    output directory
      * @param $output_name string   output filename
-     * @param string $psw           password
-     * @return string Output filename
+     * @return string Output file path
      */
-    public function secure(string $output_dir, string $output_name, string $psw){
+    public function secure(string $output_dir, string $output_name): string{
+        if($this->password == "")
+            throw Exception("Password cannot be empty", 1);
+
         $output_path = $this->generateOutputFilePath($output_dir, $output_name);
-        $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path, $psw));
+        $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path));
         exec($command);
         return $output_path;
     }
     /**
-     * Generate output file path
-     * @param string $output_dir    Specifies output directory.
-     * @param string $output_name   Specifies output file name.
-     * @return string output file path
-     */
-    protected function generateOutputFilePath(string $output_dir, string $output_name): string{
-        $filename = ($output_name != "") ? $output_name : $this->file->getFilename()."_new";
-        $directory = ($output_dir != "") ? $output_dir : $this->file->getDirectory();
-        return $directory."/".$filename.".pdf";
-    }
-    /**
      * Compose gs command args
      * @param string $output_path output file path
-     * @param string $psw           password
      * @return string args for the gs command
      */
-    protected function composeCommandArgs(string $output_path, string $psw): string{
+    protected function composeCommandArgs(string $output_path): string{
         return "gs -sDEVICE=pdfwrite -dBATCH -dNOPROMPT -dNOPAUSE -dQUIET ".
-            "-sOwnerPassword=$psw -sOutputFile=$output_path ".$this->file->getPath();
+            "-sOwnerPassword=$this->password -sOutputFile=$output_path ".$this->file->getPath();
     }
 }

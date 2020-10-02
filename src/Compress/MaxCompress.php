@@ -1,12 +1,13 @@
 <?php
 namespace Celo\GhostPDF\Compress;
 
-use Celo\GhostPDF\Compress\ICompress;
+use Celo\GhostPDF\Compress\AbstractCompress;
 use Celo\GhostPDF\FileManager\File;
 
-class MaxCompress extends ICompress {
+class MaxCompress extends AbstractCompress {
+    /** @param File $file */
     function __construct(File $file){
-        $this->file = $file;
+        parent::__construct($file);
     }        
 
     protected function composeCommandArgs(string $output_path): string{

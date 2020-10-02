@@ -1,13 +1,14 @@
 <?php
 namespace Celo\GhostPDF\Compress;
 
-use Celo\GhostPDF\Compress\ICompress;
+use Celo\GhostPDF\Compress\AbstractCompress;
 use Celo\GhostPDF\FileManager\File;
 
-class DefaultCompress extends ICompress {
+class DefaultCompress extends AbstractCompress {
+    /** @param File $file */
     function __construct(File $file){
-        $this->file = $file;
-    }        
+        parent::__construct($file);
+    }      
 
     protected function composeCommandArgs(string $output_path): string{
         return "-q -dNOPAUSE -dBATCH -dSAFER -dQUIET ".

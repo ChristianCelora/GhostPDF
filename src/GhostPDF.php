@@ -58,6 +58,7 @@ class GhostPDF {
      */
     public function removePages(array $ranges): string{
         $engine = new PagesManipulator($this->fm->getFile());
+        $engine->setPageRanges($ranges);
         return $engine->remove($this->output_dir, $this->output_name, $ranges);
     }
     /**
@@ -67,6 +68,7 @@ class GhostPDF {
      */
     public function secure(string $psw): string{
         $engine = new SecurePDF($this->fm->getFile());
+        $engine->setPassword($psw);
         return $engine->secure($this->output_dir, $this->output_name, $psw);
     }
 }

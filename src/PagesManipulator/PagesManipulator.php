@@ -1,63 +1,63 @@
 <?php
 namespace Celo\GhostPDF\PagesManipulator;
 
+use Celo\GhostPDF\AbstractGS;
 use Celo\GhostPDF\FileManager\File;
 
 /** Prototype */
-class PagesManipulator {
+class PagesManipulator extends AbstractGS{
+    /** @var array $ranges */
+    private $ranges;
+    /** @param File $file */
     function __construct(File $file){
-        $this->file = $file;
-    } 
+        parent::__construct($file, "new");
+        $this->ranges = array();
+    }
+    /**
+     * Sets page ranges
+     * @param array $r page ranges
+     */
+    public function setPageRanges(array $r){
+        /**
+         * $r -> array(
+         *      0 => 1-1
+         *      1 => 2-5
+         * )
+         */
+        $this->ranges = $r;
+    }
     /**
      * Remove pages from PDF
      * @param string $output_dir  Output directory
      * @param string $output_name Output filename
-     * @param array $ranges       array of ranges. Pages inside these ranges will be put in the output file
-     * @return string Output filename
+     * @return string Output file path
      */
-    public function remove(string $output_dir, string $output_name, array $ranges): string{
+    public function remove(string $output_dir, string $output_name): string{
+        if(empty($this->ranges))
+            throw Exception("Ranges cannot be empty", 1);
         $output_path = $this->generateOutputFilePath($output_dir, $output_name);
-        $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path, $ranges));
+        $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path));
         exec($command);
         return $output_path;
     }
     /**
-     * Generate output file path
-     * @param string $output_dir Specifies output directory.
-     * @param string $output_name Specifies output file name.
-     * @return string output file path
-     */
-    protected function generateOutputFilePath(string $output_dir, string $output_name): string{
-        $filename = ($output_name != "") ? $output_name : $this->file->getFilename()."_new";
-        $directory = ($output_dir != "") ? $output_dir : $this->file->getDirectory();
-        return $directory."/".$filename.".pdf";
-    }
-    /**
      * Compose gs command args
      * @param string $output_path output file path
-     * @param array $ranges     file page numbers to keep
      * @return string args for the gs command
      */
-    private function composeCommandArgs(string $output_path, array $ranges): string{
-        $ranges = $this->rangeAsString($ranges);
+    protected function composeCommandArgs(string $output_path): string{
+        $ranges = $this->getRangeAsString();
         return "-sDEVICE=pdfwrite -dNOPAUSE -dBATCH -dSAFER ". 
             "-sPageList=$ranges ". 
             "-sOutputFile=$output_path ".$this->file->getPath();
     }
     /**
      * Convert ranges array to string
-     * @param array $ranges
      * @return string
      */
-    private function rangeAsString(array $ranges): string{
-        /**
-         * $ranges -> array(
-         *      0 => 1-1
-         *      1 => 2-5
-         * )
-         */
+    private function getRangeAsString(): string{
         $range = array();
-        foreach($ranges as $r){
+        foreach($this->ranges as $r){
             $r_arr = explode("-", $r);
             if(sizeof($r_arr) > 1){
                 $range[] = ($r_arr[0] == $r_arr[1]) ? $r_arr[0] : $r;
