@@ -93,8 +93,13 @@ class CoreTest extends TestCase {
         );
     }
 
+    public function testSecurePages(){
+        $outputfile = $this->gs_pdf->secure("1234");
+        $this->assertFileExists($outputfile);
+    }
+
     /** Auxiliar functions */
-    function count_pages($pdfname) {
+    private function count_pages($pdfname) {
         $pdftext = file_get_contents($pdfname);
         $num = preg_match_all("/\/Page\W/", $pdftext, $dummy);
         return $num;

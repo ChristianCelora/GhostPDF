@@ -6,6 +6,7 @@ namespace Celo\GhostPDF;
 use Celo\GhostPDF\FileManager\FileManager;
 use Celo\GhostPDF\Compress\Factory\ComrpessFactory;
 use Celo\GhostPDF\PagesManipulator\PagesManipulator;
+use Celo\GhostPDF\Security\SecurePDF;
 
 class GhostPDF {
     /** @var FileManager $fm */
@@ -55,8 +56,17 @@ class GhostPDF {
      * @param array $ranges range page to be kept in new file
      * @return string path output file 
      */
-    public function removePages(array $ranges){
+    public function removePages(array $ranges): string{
         $engine = new PagesManipulator($this->fm->getFile());
         return $engine->remove($this->output_dir, $this->output_name, $ranges);
+    }
+    /**
+     * Add password to PDF
+     * @param string $psw range page to be kept in new file
+     * @return string path output file 
+     */
+    public function secure(string $psw): string{
+        $engine = new SecurePDF($this->fm->getFile());
+        return $engine->secure($this->output_dir, $this->output_name, $psw);
     }
 }

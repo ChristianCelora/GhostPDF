@@ -10,9 +10,9 @@ class PagesManipulator {
     } 
     /**
      * Remove pages from PDF
-     * @param $output_dir string output directory
-     * @param $output_name string output filename
-     * @param $ranges array of ranges. Pages inside these ranges will be put in the output file
+     * @param string $output_dir  Output directory
+     * @param string $output_name Output filename
+     * @param array $ranges       array of ranges. Pages inside these ranges will be put in the output file
      * @return string Output filename
      */
     public function remove(string $output_dir, string $output_name, array $ranges): string{
@@ -38,7 +38,7 @@ class PagesManipulator {
      * @param array $ranges     file page numbers to keep
      * @return string args for the gs command
      */
-    private function composeCommandArgs(string $output_path, array $ranges){
+    private function composeCommandArgs(string $output_path, array $ranges): string{
         $ranges = $this->rangeAsString($ranges);
         return "-sDEVICE=pdfwrite -dNOPAUSE -dBATCH -dSAFER ". 
             "-sPageList=$ranges ". 
@@ -49,7 +49,7 @@ class PagesManipulator {
      * @param array $ranges
      * @return string
      */
-    private function rangeAsString(array $ranges){
+    private function rangeAsString(array $ranges): string{
         /**
          * $ranges -> array(
          *      0 => 1-1
