@@ -22,10 +22,11 @@ abstract class AbstractGS {
      * @param string $output_name Specifies output file name.
      * @return string output file path
      */
-    protected function generateOutputFilePath(string $output_dir, string $output_name): string{
+    protected function generateOutputFilePath(string $output_dir, string $output_name, string $extension): string{
         $filename = ($output_name != "") ? $output_name : $this->file->getFilename().$this->output_file_suffix;
         $directory = ($output_dir != "") ? $output_dir : $this->file->getDirectory();
-        return $directory."/".$filename.".pdf";
+        $extension = ($extension != "") ? $extension : "pdf";
+        return $directory."/".$filename.".".$extension;
     }
     /**
      * Compose gs command args

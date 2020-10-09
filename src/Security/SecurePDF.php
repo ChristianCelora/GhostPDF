@@ -23,13 +23,14 @@ class SecurePDF extends AbstractGS{
      * Sets owner password to output pdf
      * @param $output_dir string    output directory
      * @param $output_name string   output filename
+     * @param $extension string     output extension
      * @return string Output file path
      */
-    public function secure(string $output_dir, string $output_name): string{
+    public function secure(string $output_dir, string $output_name, string $extension): string{
         if($this->password == "")
             throw Exception("Password cannot be empty", 1);
 
-        $output_path = $this->generateOutputFilePath($output_dir, $output_name);
+        $output_path = $this->generateOutputFilePath($output_dir, $output_name, $extension);
         $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path));
         exec($command);
         return $output_path;

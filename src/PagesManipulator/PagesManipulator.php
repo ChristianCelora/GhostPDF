@@ -30,12 +30,13 @@ class PagesManipulator extends AbstractGS{
      * Remove pages from PDF
      * @param string $output_dir  Output directory
      * @param string $output_name Output filename
+     * @param string $extension   Output file extension
      * @return string Output file path
      */
-    public function remove(string $output_dir, string $output_name): string{
+    public function remove(string $output_dir, string $output_name, string $extension): string{
         if(empty($this->ranges))
             throw Exception("Ranges cannot be empty", 1);
-        $output_path = $this->generateOutputFilePath($output_dir, $output_name);
+        $output_path = $this->generateOutputFilePath($output_dir, $output_name, $extension);
         $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path));
         exec($command);
         return $output_path;

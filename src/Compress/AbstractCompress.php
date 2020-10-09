@@ -12,12 +12,13 @@ abstract class AbstractCompress extends AbstractGS{
     }
     /**
      * Compress the PDF
-     * @param string $output_dir Optional. Specifies output directory.
-     * @param string $output_name Optional. Specifies output file name.
+     * @param string $output_dir  Output directory.
+     * @param string $output_name Output file name.
+     * @param string $extension   Output file extension.
      * @return string output file path
      */
-    public function compress(string $output_dir = "", string $output_name = ""): string{
-        $output_path = $this->generateOutputFilePath($output_dir, $output_name);
+    public function compress(string $output_dir, string $output_name, string $extension): string{
+        $output_path = $this->generateOutputFilePath($output_dir, $output_name, $extension);
         $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path));
         exec($command);
         return $output_path;

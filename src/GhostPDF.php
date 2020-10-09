@@ -26,6 +26,7 @@ class GhostPDF {
         $this->compress_factory = new ComrpessFactory();
         $this->output_name = "";
         $this->output_dir = "";
+        $this->extension = "";
     }
     /**
      * Sets output file name
@@ -42,6 +43,13 @@ class GhostPDF {
         $this->output_dir = $output_dir;
     }
     /**
+     * Sets output file extension
+     * @param string $output_dir
+     */
+    public function setOutputExtension(string $extension){
+        $this->extension = $extension;
+    }
+    /**
      * Compress PDF 
      * @param bool $max_compression Optional. if true utilize maxium compression
      * @return string path compressed file 
@@ -49,7 +57,7 @@ class GhostPDF {
     public function compress(bool $max_compression = false): string{
         $type = ($max_compression) ? ComrpessFactory::MAX_COMPRESSION : ComrpessFactory::STANDARD_COMPRESSION;
         $engine = $this->compress_factory->create($type, $this->fm->getFile());
-        return $engine->compress($this->output_dir, $this->output_name);
+        return $engine->compress($this->output_dir, $this->output_name, $this->extension);
     }
     /**
      * Remove pages from PDF
@@ -59,7 +67,7 @@ class GhostPDF {
     public function removePages(array $ranges): string{
         $engine = new PagesManipulator($this->fm->getFile());
         $engine->setPageRanges($ranges);
-        return $engine->remove($this->output_dir, $this->output_name, $ranges);
+        return $engine->remove($this->output_dir, $this->output_name, $this->extension);
     }
     /**
      * Add password to PDF
@@ -69,6 +77,6 @@ class GhostPDF {
     public function secure(string $psw): string{
         $engine = new SecurePDF($this->fm->getFile());
         $engine->setPassword($psw);
-        return $engine->secure($this->output_dir, $this->output_name, $psw);
+        return $engine->secure($this->output_dir, $this->output_name, $this->extension);
     }
 }
