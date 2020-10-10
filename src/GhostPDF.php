@@ -6,7 +6,9 @@ namespace Celo\GhostPDF;
 use Celo\GhostPDF\FileManager\FileManager;
 use Celo\GhostPDF\Compress\Factory\ComrpessFactory;
 use Celo\GhostPDF\PagesManipulator\PagesManipulator;
+use Celo\GhostPDF\PagesManipulator\JoinPDF;
 use Celo\GhostPDF\Security\SecurePDF;
+use Exception;
 
 class GhostPDF {
     /** @var FileManager $fm */
@@ -50,6 +52,12 @@ class GhostPDF {
         $this->extension = $extension;
     }
     /**
+     * @return File
+     */
+    public function getFile(){
+        return $this->fm->getFile();
+    }
+    /**
      * Compress PDF 
      * @param bool $max_compression Optional. if true utilize maxium compression
      * @return string path compressed file 
@@ -78,5 +86,22 @@ class GhostPDF {
         $engine = new SecurePDF($this->fm->getFile());
         $engine->setPassword($psw);
         return $engine->secure($this->output_dir, $this->output_name, $this->extension);
+    }
+    /**
+     * Join multilpe PDF
+     * @param array $paths Array of file paths
+     * @return string path output file
+     */
+    public function join(array $paths){
+        $files = array($this->fm->getFile());
+        foreach($paths as $path){
+            $tmp = new FileManager($path);
+            if($tmp->isFileValid()){
+                $files[] = $tmp->getFile();
+            }
+            unset($tmp);
+        }
+        $engine = new JoinPDF($files);
+        return $engine->join($this->output_dir, $this->output_name, $this->extension);
     }
 }

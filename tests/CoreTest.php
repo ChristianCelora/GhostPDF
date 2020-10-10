@@ -3,6 +3,7 @@ require_once("vendor/autoload.php");
 
 use \PHPUnit\Framework\TestCase;
 use Celo\GhostPDF\GhostPDF;
+use Celo\GhostPDF\FileManager\File;
 
 class CoreTest extends TestCase {
 
@@ -98,10 +99,21 @@ class CoreTest extends TestCase {
         $this->assertFileExists($outputfile);
     }
 
+    public function testJoinPdf(){
+        $outputfile = $this->gs_pdf->join(array($this->filepath));
+        echo __DIR__;
+        $this->assertFileExists($outputfile);
+        $this->assertEquals(
+            $this->count_pages(__DIR__."/../".$this->filepath) * 2, 
+            $this->count_pages($outputfile),
+            "Il numero di pagine del file creato non corrispondono."
+        );
+    }
+
     /** Auxiliar functions */
     private function count_pages($pdfname) {
         $pdftext = file_get_contents($pdfname);
         $num = preg_match_all("/\/Page\W/", $pdftext, $dummy);
         return $num;
-      }
+    }
 }
