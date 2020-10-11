@@ -39,7 +39,7 @@ class JoinPDF extends AbstractGS{
      * @param string $extension   Output file extension.
      * @return string output file path
      */
-    public function join(string $output_dir, string $output_name, string $extension){
+    public function join(string $output_dir, string $output_name, string $extension): string{
         $output_path = $this->generateOutputFilePath($output_dir, $output_name, $extension);
         $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path));
         exec($command);
@@ -57,7 +57,7 @@ class JoinPDF extends AbstractGS{
     /**
      * @return array Array of paths
      */
-    private function getFilesPath(){
+    private function getFilesPath(): array{
         $paths = array();
         foreach($this->files as $file){
             $paths[] = $file->getPath();

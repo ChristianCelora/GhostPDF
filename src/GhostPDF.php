@@ -5,7 +5,8 @@ namespace Celo\GhostPDF;
 
 use Celo\GhostPDF\FileManager\FileManager;
 use Celo\GhostPDF\Compress\Factory\ComrpessFactory;
-use Celo\GhostPDF\PagesManipulator\PagesManipulator;
+use Celo\GhostPDF\PagesManipulator\SplitPDF;
+use Celo\GhostPDF\PagesManipulator\SlimPDF;
 use Celo\GhostPDF\PagesManipulator\JoinPDF;
 use Celo\GhostPDF\Security\SecurePDF;
 use Exception;
@@ -73,9 +74,19 @@ class GhostPDF {
      * @return string path output file 
      */
     public function removePages(array $ranges): string{
-        $engine = new PagesManipulator($this->fm->getFile());
+        $engine = new SlimPDF($this->fm->getFile());
         $engine->setPageRanges($ranges);
         return $engine->remove($this->output_dir, $this->output_name, $this->extension);
+    }
+    /**
+     * Splits PDF 
+     * @param array $ranges range of pages. Every range will be a new pdf file
+     * @return array Array of all file paths created (one for each range)
+     */
+    public function split(array $ranges): array{
+        $engine = new SplitPDF($this->fm->getFile());
+        $engine->setPageRanges($ranges);
+        return $engine->split($this->output_dir, $this->output_name, $this->extension);
     }
     /**
      * Add password to PDF
@@ -92,7 +103,7 @@ class GhostPDF {
      * @param array $paths Array of file paths
      * @return string path output file
      */
-    public function join(array $paths){
+    public function join(array $paths): string{
         $files = array($this->fm->getFile());
         foreach($paths as $path){
             $tmp = new FileManager($path);

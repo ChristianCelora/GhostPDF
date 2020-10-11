@@ -10,6 +10,8 @@ class CoreTest extends TestCase {
     protected $gs_pdf;
     protected $filepath;
     protected $filename;
+    /** @var array generated files during test */
+    protected static $generated_files = array();
 
     protected function setUp(): void{
         global $argc, $argv;
@@ -28,68 +30,68 @@ class CoreTest extends TestCase {
     }
 
     public function testDefaultCompress(){
-        $outputfile = $this->gs_pdf->compress();
+        self::$generated_files[] = $this->gs_pdf->compress();
         $in_file_info = pathinfo($this->filepath);
-        $out_file_info = pathinfo($outputfile);
+        $out_file_info = pathinfo(end(self::$generated_files));
         $this->assertEquals(
             $in_file_info["filename"]."_compressed.pdf", 
             $out_file_info["filename"].".".$out_file_info["extension"]
         );
         $this->assertLessThanOrEqual(
             filesize($this->filepath), 
-            filesize($outputfile),
+            filesize(end(self::$generated_files)),
             "Compressed file should have smaller size than original :|"
         );
-        $this->assertFileExists($outputfile);
+        $this->assertFileExists(end(self::$generated_files));
     }
 
     public function testMaxCompress(){
-        $outputfile = $this->gs_pdf->compress(true);
+        self::$generated_files[] = $this->gs_pdf->compress(true);
         $in_file_info = pathinfo($this->filepath);
-        $out_file_info = pathinfo($outputfile);
+        $out_file_info = pathinfo(end(self::$generated_files));
         $this->assertEquals(
             $in_file_info["filename"]."_compressed.pdf", 
             $out_file_info["filename"].".".$out_file_info["extension"]
         );
         $this->assertLessThanOrEqual(
             filesize($this->filepath), 
-            filesize($outputfile),
+            filesize(end(self::$generated_files)),
             "Compressed file should have smaller size than original :|"
         );
-        $this->assertFileExists($outputfile);
+        $this->assertFileExists(end(self::$generated_files));
     }
 
     public function testSetOutputFilename(){
         $this->gs_pdf->setOutputFilename("test_renamed");
-        $outputfile = $this->gs_pdf->compress();
-        $out_file_info = pathinfo($outputfile);
+        self::$generated_files[] = $this->gs_pdf->compress();
+        $out_file_info = pathinfo(end(self::$generated_files));
         $this->assertEquals("test_renamed", $out_file_info["filename"]);
 
     }
 
     public function testSetOutputDirectory(){
         $this->gs_pdf->setOutputDirectory("/tmp/");
-        $outputfile = $this->gs_pdf->compress();
-        $out_file_info = pathinfo($outputfile);
+        self::$generated_files[] = $this->gs_pdf->compress();
+        $out_file_info = pathinfo(end(self::$generated_files));
         $this->assertEquals("/tmp", $out_file_info["dirname"]);
     }
 
     public function testKeepFirstPage(){
-        $outputfile = $this->gs_pdf->removePages(["1-1"]);
-        $this->assertFileExists($outputfile);
+        self::$generated_files[] = $this->gs_pdf->removePages(["1-1"]);
+        $this->assertFileExists(end(self::$generated_files));
         $this->assertEquals(
             1, 
-            $this->count_pages($outputfile),
+            $this->count_pages(end(self::$generated_files)),
             "Il numero di pagine del file creato non corrispondono."
         );
     }
 
     public function testKeepFirstTenPages(){
-        $outputfile = $this->gs_pdf->removePages(["1-10"]);
-        $this->assertFileExists($outputfile);
+        self::$generated_files[] = $this->gs_pdf->removePages(["1-10"]);
+        $this->assertFileExists(end(self::$generated_files));
         $this->assertLessThanOrEqual(
             10, 
-            $this->count_pages($outputfile),
+            $this->count_pages(end(self::$generated_files)),
             "Il numero di pagine del file creato non corrispondono."
         );
     }
@@ -100,14 +102,27 @@ class CoreTest extends TestCase {
     }
 
     public function testJoinPdf(){
-        $outputfile = $this->gs_pdf->join(array($this->filepath));
-        echo __DIR__;
-        $this->assertFileExists($outputfile);
+        self::$generated_files[] = $this->gs_pdf->join(array($this->filepath));
+        $this->assertFileExists(end(self::$generated_files));
         $this->assertEquals(
             $this->count_pages(__DIR__."/../".$this->filepath) * 2, 
-            $this->count_pages($outputfile),
+            $this->count_pages(end(self::$generated_files)),
             "Il numero di pagine del file creato non corrispondono."
         );
+    }
+
+    public function testSplitPdf(){
+        $ranges = array("1-2", "3-4", "5-6");
+        $files = $this->gs_pdf->split($ranges);
+        foreach($files as $outputfile){
+            self::$generated_files[] = $outputfile;
+            $this->assertFileExists($outputfile);
+            $this->assertEquals(
+                2, 
+                $this->count_pages($outputfile),
+                "Il numero di pagine del file creato non corrispondono."
+            );
+        }
     }
 
     /** Auxiliar functions */
@@ -115,5 +130,12 @@ class CoreTest extends TestCase {
         $pdftext = file_get_contents($pdfname);
         $num = preg_match_all("/\/Page\W/", $pdftext, $dummy);
         return $num;
+    }
+
+    public static function tearDownAfterClass(): void{
+        /** Deletes all generated files */
+        foreach(self::$generated_files as $path){
+            unlink(__DIR__."/../".$path);
+        }
     }
 }
