@@ -32,6 +32,7 @@ class SecurePDF extends AbstractGS{
 
         $output_path = $this->generateOutputFilePath($output_dir, $output_name, $extension);
         $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path));
+        error_log($command);
         exec($command);
         return $output_path;
     }
@@ -41,7 +42,7 @@ class SecurePDF extends AbstractGS{
      * @return string args for the gs command
      */
     protected function composeCommandArgs(string $output_path): string{
-        return "gs -sDEVICE=pdfwrite -dBATCH -dNOPROMPT -dNOPAUSE -dQUIET ".
-            "-sOwnerPassword=$this->password -sOutputFile=$output_path ".$this->file->getPath();
+        return "-sDEVICE=pdfwrite -dBATCH -dNOPROMPT -dNOPAUSE -dQUIET ".
+            "-sOwnerPassword='$this->password' -sUserPassword='$this->password' -sOutputFile=$output_path ".$this->file->getPath();
     }
 }
