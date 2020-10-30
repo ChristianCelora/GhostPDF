@@ -32,7 +32,6 @@ class SecurePDF extends AbstractGS{
 
         $output_path = $this->generateOutputFilePath($output_dir, $output_name, $extension);
         $command = escapeshellcmd("gs ".$this->composeCommandArgs($output_path));
-        error_log($command);
         exec($command);
         return $output_path;
     }
