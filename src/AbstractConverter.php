@@ -13,10 +13,8 @@ abstract class AbstractConverter {
         $this->file = $file;
     }
     /**
-     * Generate output file path
-     * @param string $output_dir Specifies output directory.
-     * @param string $output_name Specifies output file name.
-     * @return string output file path
+     * Generate input file path
+     * @return string input file path
      */
     protected function getInputFilePath(): string{
         return $this->file->getPath();

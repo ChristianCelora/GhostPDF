@@ -36,8 +36,8 @@ function main(string $input_file, bool $max_compression){
     // $result_file = $gs->secure("aaa");
 
     // Convert
-    $converter = ConverterFactory::create($input_file, ConverterFactory::DOCX_CONVERTER);
-    $result_file = $converter->convertToPDF();
+    $converter = ConverterFactory::create($input_file, ConverterFactory::PDF_CONVERTER);
+    $result_file = $converter->convert();
     print("Converting...\n");
     print("Converted! result file $result_file\n");
 }

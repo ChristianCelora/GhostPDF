@@ -2,8 +2,5 @@
 namespace Celo\GhostPDF\Convert;
 
 interface IConverter {
-
-    public function convertFromPDF(): string;
-
-    public function convertToPDF(): string;
+    public function convert(): string;
 }

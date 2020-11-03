@@ -3,13 +3,11 @@ namespace Celo\GhostPDF;
 
 use Celo\GhostPDF\FileManager\FileManager;
 use Celo\GhostPDF\Convert\IConverter;
-use Celo\GhostPDF\Convert\DocxConverter;
-use Celo\GhostPDF\Convert\XlsxConverter;
+use Celo\GhostPDF\Convert\PDFConverter;
 use Exception;
 
 class ConverterFactory {
-    const DOCX_CONVERTER = "docx";
-    const XSLX_CONVERTER = "xslx";
+    const PDF_CONVERTER = "pdf";
 
     public static function create(string $path, string $converter_type): IConverter{
         $fm = new FileManager($path);
@@ -18,12 +16,8 @@ class ConverterFactory {
         }
         $file = $fm->getFile();
         switch($converter_type){
-            case "xslx":
-                $converter = new DocxConverter($file);
-                break;
-
-            case "docx":
-                $converter = new XlsxConverter($file);
+            case "pdf":
+                $converter = new PDFConverter($file);
                 break;
             
             default:

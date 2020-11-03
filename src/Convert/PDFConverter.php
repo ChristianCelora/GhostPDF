@@ -5,17 +5,13 @@ use Celo\GhostPDF\AbstractConverter;
 use Celo\GhostPDF\Convert\IConverter;
 use Celo\GhostPDF\FileManager\File;
 
-class XlsxConverter extends AbstractConverter implements IConverter{
+class PDFConverter extends AbstractConverter implements IConverter{
 
     function __construct(File $file){
         parent::__construct($file, "");
     } 
 
-    public function convertFromPDF(): string{
-        // 
-    }
-
-    public function convertToPDF(): string{
+    public function convert(): string{
         $input_path = $this->getInputFilePath();
         $outputdir = $this->getOutputDirectory("");
         $command = escapeshellcmd("libreoffice --convert-to pdf:writer_pdf_Export $input_path --outdir $outputdir");
