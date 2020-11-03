@@ -8,6 +8,7 @@
 require_once("vendor/autoload.php");
 
 use Celo\GhostPDF\GhostPDF;
+use Celo\GhostPDF\ConverterFactory;
 
 if($argc < 2 || !isset($argv[1]))
     exit("Insert PDF path for unit test\n");
@@ -24,7 +25,7 @@ function main(string $input_file, bool $max_compression){
     }catch(Exception $e){
         exit($e->getMessage());
     }
-    echo "Compressing...\n";
+    // echo "Compressing...\n";
     // $result_file = $gs->compress($max_compression);
     // $compressed_size = filesize($result_file);
     // echo "File compressed succesfully!\n".
@@ -32,7 +33,13 @@ function main(string $input_file, bool $max_compression){
     //     "original size: ".formatSizeUnits($original_size)."\n".
     //     "compressed size: ".formatSizeUnits($compressed_size)."\n";
 
-    $result_file = $gs->secure("aaa");
+    // $result_file = $gs->secure("aaa");
+
+    // Convert
+    $converter = ConverterFactory::create($input_file, ConverterFactory::DOCX_CONVERTER);
+    $result_file = $converter->convertToPDF();
+    print("Converting...\n");
+    print("Converted! result file $result_file\n");
 }
 
 function formatSizeUnits($bytes){
