@@ -35,11 +35,17 @@ function main(string $input_file, bool $max_compression){
 
     // $result_file = $gs->secure("aaa");
 
-    // Convert
+    // Convert Docx -> PDF -> Docx
     $converter = ConverterFactory::create($input_file, ConverterFactory::PDF_CONVERTER);
     print("Converting...\n");
     $result_file = $converter->convert();
     print("Converted! result file $result_file\n");
+    print("Converting back...\n");
+    $converter = ConverterFactory::create($result_file, ConverterFactory::DOCX_CONVERTER);
+    unlink($input_file); // Delete original file
+    $result_file = $converter->convert();
+    print("Converted! result file $result_file\n");
+
 }
 
 function formatSizeUnits($bytes){

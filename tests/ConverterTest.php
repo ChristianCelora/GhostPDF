@@ -29,6 +29,15 @@ class ConverterTest extends TestCase {
         $this->assertEquals("pdf", $out_file_info["extension"]);
     }
 
+    public function testConvertPdfToDocx(){
+        // Takes file from previous test output (care if previous test fails)
+        $converter = ConverterFactory::create(end(self::$generated_files), ConverterFactory::DOCX_CONVERTER);
+        self::$generated_files[] = $converter->convert();
+        $this->assertFileExists(end(self::$generated_files));
+        $out_file_info = pathinfo(end(self::$generated_files));
+        $this->assertEquals("docx", $out_file_info["extension"]);
+    }
+
     public static function tearDownAfterClass(): void{
         /** Deletes all generated files */
         foreach(self::$generated_files as $path){
