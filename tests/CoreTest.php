@@ -125,6 +125,10 @@ class CoreTest extends TestCase {
         }
     }
 
+    public function testConvertFileToPdf(){
+        $converter = ConverterFactory::create($this->filepath, ConverterFactory::PDF_CONVERTER);
+    }
+
     /** Auxiliar functions */
     private function count_pages($pdfname) {
         $pdftext = file_get_contents($pdfname);
