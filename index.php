@@ -37,8 +37,8 @@ function main(string $input_file, bool $max_compression){
 
     // Convert
     $converter = ConverterFactory::create($input_file, ConverterFactory::PDF_CONVERTER);
-    $result_file = $converter->convert();
     print("Converting...\n");
+    $result_file = $converter->convert();
     print("Converted! result file $result_file\n");
 }
 

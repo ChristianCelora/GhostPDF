@@ -45,6 +45,14 @@ Glue multiple PDFs
 $path_output_file = $gs->join($paths);
 ``` 
 
+## Convert files
+Convert files to PDF 
+```
+    $converter = ConverterFactory::create($input_file, ConverterFactory::PDF_CONVERTER);
+    $result_file = $converter->convert();
+```
+
+
 ## Author
 Christian Celora.
 Check my github at https://github.com/ChristianCelora
