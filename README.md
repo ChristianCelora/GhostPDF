@@ -46,12 +46,16 @@ $path_output_file = $gs->join($paths);
 ``` 
 
 ## Convert files
-Convert files to PDF 
+Doc/Docx/Xls/Xslx -> PDF :
 ```
     $converter = ConverterFactory::create($input_file, ConverterFactory::PDF_CONVERTER);
     $result_file = $converter->convert();
 ```
-
+PDF -> Docx:
+```
+    $converter = ConverterFactory::create($input_file, ConverterFactory::DOCX_CONVERTER);
+    $result_file = $converter->convert();
+```
 
 ## Author
 Christian Celora.
