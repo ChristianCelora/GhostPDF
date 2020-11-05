@@ -38,10 +38,24 @@ class ConverterTest extends TestCase {
         $this->assertEquals("docx", $out_file_info["extension"]);
     }
 
+    public function testSetOutputDirectory(){
+        $custom_out_dir = "/tmp";
+        $converter = ConverterFactory::create($this->filepath, ConverterFactory::PDF_CONVERTER);
+        $converter->setOutputDirectory($custom_out_dir);
+        self::$generated_files[] = $converter->convert();
+        $this->assertFileExists(end(self::$generated_files));
+        $out_file_info = pathinfo(end(self::$generated_files));
+        $this->assertEquals($custom_out_dir, $out_file_info["dirname"]);
+    }
+
     public static function tearDownAfterClass(): void{
         /** Deletes all generated files */
         foreach(self::$generated_files as $path){
-            unlink(__DIR__."/../".$path);
+            if($path[0] == "/"){
+                unlink($path);
+            }else{
+                unlink(__DIR__."/../".$path);
+            }
         }
     }
 }

@@ -6,14 +6,14 @@ use Celo\GhostPDF\Convert\IConverter;
 use Celo\GhostPDF\FileManager\File;
 
 class DocxConverter extends AbstractConverter implements IConverter{
-
-    function __construct(File $file){
-        parent::__construct($file, "");
+    
+    function __construct(File $file, bool $flag_www_data = false){
+        parent::__construct($file, $flag_www_data);
     } 
 
     public function convert(): string{
         $input_path = $this->getInputFilePath();
-        $outputdir = $this->getOutputDirectory("");
+        $outputdir = $this->getOutputDirectory();
         $command = escapeshellcmd("libreoffice --invisible --infilter='writer_pdf_import' ".
             " --convert-to docx:'MS Word 2007 XML' $input_path --outdir $outputdir");
         exec($command);

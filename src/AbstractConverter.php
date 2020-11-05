@@ -6,11 +6,19 @@ use Celo\GhostPDF\FileManager\File;
 abstract class AbstractConverter {
     /** @var File $file */
     protected $file;
+    /** @var string $output_dir */
+    protected $output_dir;
     /**
      * @param File $file
+     * @param boolean $flag_www_data If flag is true environment is set for exec libreoffice command (recommended if user is www-data)
      */
-    function __construct(File $file, string $file_suffix = ""){
+    function __construct(File $file, bool $flag_www_data = false){
         $this->file = $file;
+        $this->output_dir = "";
+        if($flag_www_data){
+            putenv('PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin');
+            putenv('HOME=/tmp'); 
+        }
     }
     /**
      * Generate input file path
@@ -20,10 +28,18 @@ abstract class AbstractConverter {
         return $this->file->getPath();
     }
     /**
+     * Sets custom output directory
+     * @param string $output_dir
+     */
+    public function setOutputDirectory(string $output_dir){
+        $this->output_dir = $output_dir;
+    }
+    /**
      * Get Output directory
+     * @return string output directory
     */
-    protected function getOutputDirectory(string $output_dir){
-        return ($output_dir != "") ? $output_dir : $this->file->getDirectory();
+    protected function getOutputDirectory(): string{
+        return ($this->output_dir != "") ? $this->output_dir : $this->file->getDirectory();
     }
     /**
      * Generate output file path
