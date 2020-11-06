@@ -11,7 +11,7 @@ class ConverterFactory {
     const PDF_CONVERTER = "pdf";
     const DOCX_CONVERTER = "docx";
 
-    public static function create(string $path, string $converter_type): IConverter{
+    public static function create(string $path, string $converter_type, bool $flag_set_env = false): IConverter{
         $fm = new FileManager($path);
         if(!$fm->isFileValid()){
             throw new Exception("file path not valid: $path", 1);
@@ -19,11 +19,11 @@ class ConverterFactory {
         $file = $fm->getFile();
         switch($converter_type){
             case self::PDF_CONVERTER:
-                $converter = new PDFConverter($file);
+                $converter = new PDFConverter($file, $flag_set_env);
                 break;
 
             case self::DOCX_CONVERTER:
-                $converter = new DocxConverter($file);
+                $converter = new DocxConverter($file, $flag_set_env);
                 break;
             
             default:
