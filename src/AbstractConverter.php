@@ -12,15 +12,10 @@ abstract class AbstractConverter {
     protected $soffice_path;
     /**
      * @param File $file
-     * @param boolean $flag_www_data If flag is true environment is set for exec libreoffice command (recommended if user is www-data)
      */
-    function __construct(File $file, bool $flag_www_data = false){
+    function __construct(File $file){
         $this->file = $file;
         $this->output_dir = "";
-        if($flag_www_data){
-            putenv('PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin');
-            putenv('HOME=/tmp'); 
-        }
         $this->soffice_path = $this->detectLibreofficeDirectory();
     }
     /**

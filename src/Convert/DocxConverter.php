@@ -7,8 +7,8 @@ use Celo\GhostPDF\FileManager\File;
 
 class DocxConverter extends AbstractConverter implements IConverter{
     
-    function __construct(File $file, bool $flag_www_data = false){
-        parent::__construct($file, $flag_www_data);
+    function __construct(File $file){
+        parent::__construct($file);
     } 
 
     public function convert(): string{
