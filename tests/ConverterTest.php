@@ -5,6 +5,8 @@ use \PHPUnit\Framework\TestCase;
 use Celo\GhostPDF\ConverterFactory;
 use Celo\GhostPDF\FileManager\File;
 
+define("VALID_INPUT_EXTENSIONS", "docx,doc,xsl,xslx");
+
 class ConverterTest extends TestCase {
 
     protected $filepath;
@@ -14,11 +16,14 @@ class ConverterTest extends TestCase {
     protected function setUp(): void{
         global $argc, $argv;
 
-        if($argc <= 2 || !isset($argv[2]))
-            exit("Insert file path for unit test\n");
-
-        $this->filepath = $argv[2];
-        $file_parts = pathinfo($this->filepath);
+        $this->filepath = end($argv);
+        if(!file_exists($this->filepath)){
+            exit("Insert valid file path for unit test\n");
+        }
+        $input_extension = pathinfo($this->filepath, PATHINFO_EXTENSION);
+        if(!in_array($input_extension, explode(",", VALID_INPUT_EXTENSIONS))){
+            exit("Insert file extension .$input_extension not valid\n");
+        }
     }
 
     public function testConvertFileToPdf(){
