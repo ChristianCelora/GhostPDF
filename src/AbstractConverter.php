@@ -8,6 +8,8 @@ abstract class AbstractConverter {
     protected $file;
     /** @var string $output_dir */
     protected $output_dir;
+    /** @var string $soffice_path */
+    protected $soffice_path;
     /**
      * @param File $file
      * @param boolean $flag_www_data If flag is true environment is set for exec libreoffice command (recommended if user is www-data)
@@ -19,6 +21,19 @@ abstract class AbstractConverter {
             putenv('PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin');
             putenv('HOME=/tmp'); 
         }
+        $this->soffice_path = $this->detectLibreofficeDirectory();
+    }
+    /**
+     * Detects installation of soffice/libreoffice
+     * @throws Exception if soffice not found on system
+     * @return string soffice absolute path
+     */
+    private function detectLibreofficeDirectory(){
+        exec("which soffice", $res);
+        if(empty($res) && !isset($res[0])){
+            throw new Exception("could not find soffice/libreoffice installation");
+        }
+        return $res[0];
     }
     /**
      * Generate input file path

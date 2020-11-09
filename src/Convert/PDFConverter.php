@@ -14,7 +14,7 @@ class PDFConverter extends AbstractConverter implements IConverter{
     public function convert(): string{
         $input_path = $this->getInputFilePath();
         $outputdir = $this->getOutputDirectory();
-        $command = escapeshellcmd("libreoffice --invisible --convert-to pdf:writer_pdf_Export $input_path --outdir $outputdir");
+        $command = escapeshellcmd($this->soffice_path." --invisible --convert-to pdf:writer_pdf_Export $input_path --outdir $outputdir");
         exec($command);
         return $this->generateOutputFilePath($outputdir, "", "pdf");
     }

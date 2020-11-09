@@ -14,7 +14,7 @@ class DocxConverter extends AbstractConverter implements IConverter{
     public function convert(): string{
         $input_path = $this->getInputFilePath();
         $outputdir = $this->getOutputDirectory();
-        $command = escapeshellcmd("libreoffice --invisible --infilter='writer_pdf_import' ".
+        $command = escapeshellcmd($this->soffice_path." --invisible --infilter='writer_pdf_import' ".
             " --convert-to docx:'MS Word 2007 XML' $input_path --outdir $outputdir");
         exec($command);
         return $this->generateOutputFilePath($outputdir, "", "docx");
